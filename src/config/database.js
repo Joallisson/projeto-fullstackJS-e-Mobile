@@ -3,4 +3,4 @@ const url = 'mongodb://localhost:27017/todo'; //local onde está o banco de dado
 
 moongose.connect(url, {useNewUrlParse: true}); //fazendo a conexão com o banco de dados
 
-module.exports = moongose; //Devolver a constamte moongose
+module.exports = moongose; //Devolver a constamte moongose já conectado com o BD
