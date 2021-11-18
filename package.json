@@ -1,0 +1,26 @@
+{
+  "name": "projeto-fullstackjs-e-mobile",
+  "version": "1.0.0",
+  "description": "Projeto criado utilizando a Adobe XD, NodeJS, RecatJS, MOngoDB e React Native",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Joallisson/projeto-fullstackJS-e-Mobile.git"
+  },
+  "keywords": [],
+  "author": "Joallisson Nascimento Castro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Joallisson/projeto-fullstackJS-e-Mobile/issues"
+  },
+  "homepage": "https://github.com/Joallisson/projeto-fullstackJS-e-Mobile#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
