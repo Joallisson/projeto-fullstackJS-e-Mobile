@@ -1,5 +1,5 @@
 const { Schema } = require('mongoose');
-const moongose = require('../config/database.js'); //acessando o o arquivo de conexão com bd
+const moongose = require('../config/database'); //acessando o o arquivo de conexão com bd
 const Schema = moongose.Schema; //Armazenado as informações do esquema do banco de dados em uma constante
 
 const TaskSchema = new Schema({ //Criando o modelo que na verdade é um objeto para ir para a "tabela" do BD

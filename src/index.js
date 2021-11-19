@@ -1,9 +1,9 @@
 const express = require('express'); //O express é uma dependência que faz as requisições, processa e devolve ela
 const server = express();
+server.use(express.json());
 
-server.get('/teste', (req, res) => {
-    res.send("Agora Deu Certo o Nodemon Finalmente");
-});
+const TaskRoutes = require('./routes/TaskRoutes');
+server.use('/task', TaskRoutes);
 
 server.listen(3000, () => {
     console.log("API ONLINE");
