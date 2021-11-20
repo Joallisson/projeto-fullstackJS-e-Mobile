@@ -10,6 +10,17 @@ class TaskController { //Criando classe TaskController
                 .then(response => {return res.status(200).json(response)}) //Se der tudo certo
                 .catch(error => {return res.status(500).json(error)}); //Se der alguma coisa errada
     }
+
+    async update(req, res){
+        await TaskModel.findByIdAndUpdate({'_id': req.params.id}, req.body, {new: true}) //req.params.id = O "req.params.id" esttá armazenando o "_id" da requisição /req.body = passando o corpo da requisição para ser atualizado/new: true = devolver a tarefa atualizada
+
+        .then(response => {
+            res.status(200).json(response);
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        });
+    }
 }
 
 module.exports = new TaskController();

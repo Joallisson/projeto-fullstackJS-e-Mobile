@@ -17,12 +17,20 @@ const TaskValidation = async(req, res, next) => { //Criando uma constante para v
     }else if(isPast(new Date(when))){ //Usando uma função para saber se usuário criou uma terefa no passado e convertendo o "when" de string para date
         return res.status(400).json({error: 'Insira uma tarefa furura'});
     }else{ //Se tiver todos os dados obrigatórios na requisição
-        let exists //criando variável
+        let exists; //criando variável se existe uma tarefa
 
-        exists = await TaskModel.findOne({ //Atribuindo à variável existis uma função assíncona (que para a execução das tarefas, no caso node aguarde o mongo retornar as informações) para saber se uma tarefa já foi criada na mesma data e no mesmo macaddress
-            'when': {'$eq': new Date(when)},
-            'macaddress': {'$in': macaddress}
-        });
+        if(req.params.id){ //Se estiver passando o id pela requisição, então eu não posso verificar se a própria tarefa existe
+            exists = await TaskModel.findOne({ 
+                '_id': {'$ne': req.params.id}, //'$ne' = Significa: Not Exists ou seja ele ignora o id
+                'when': {'$eq': new Date(when)}, //'$eq' = Significa: igual
+                'macaddress': {'$in': macaddress} //'$in' = Significa: está contido
+            });
+        }else{ //Senão existir uma tarefa com o mesmo id do parâmetro atual no banco de dados
+            exists = await TaskModel.findOne({ //Atribuindo à variável existis uma função assíncona (que para a execução das tarefas, no caso node aguarde o mongo retornar as informações) para saber se uma tarefa já foi criada na mesma data e no mesmo macaddress
+                'when': {'$eq': new Date(when)},
+                'macaddress': {'$in': macaddress}
+            });
+        }
 
         if(exists){ //Se existir uma tarefa no mesmo dia e no mesmo celular ou computador do usuário, não vai ser possível cadastrar essa nova tarefa
             return res.status(400).json({error: 'Já esxiste uma tarefa cadastrada nesse dia'});

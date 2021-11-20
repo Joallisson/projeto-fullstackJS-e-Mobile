@@ -5,5 +5,6 @@ const TaskController = require('../controller/TaskController'); //pegando o cont
 const TaskValidation = require('../middleware/TaskValidation');
 
 router.post('/', TaskValidation, TaskController.create); //Se a requisição feita pelo usuário for do tipo post na rota "/", então a API vai criar uma nova tarefa
+router.put('/:id', TaskValidation, TaskController.update); //Se a requisição usar o método put e passar o id
 
 module.exports = router; //exportando a rota de criação de tarefas
