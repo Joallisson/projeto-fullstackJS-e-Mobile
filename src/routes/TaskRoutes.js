@@ -5,8 +5,13 @@ const TaskController = require('../controller/TaskController'); //pegando o cont
 const TaskValidation = require('../middleware/TaskValidation');
 const MacaddressValidation = require('../middleware/MacaddressValidation');
 
+//*OBS: IMPORTANTE RESSALTAR QUE QUANDO TEM DOIS PONTOS ":" É POR QUÊ A PALAVRA É UM PARÂMETRO
 router.post('/', TaskValidation, TaskController.create); //CRIAR    //Se a requisição feita pelo usuário for do tipo post na rota "/", então a API vai criar uma nova tarefa
 router.put('/:id', TaskValidation, TaskController.update); //ATUALIZAR    //Se a requisição usar o método put e passar o id 
-router.get('/filter/all', MacaddressValidation, TaskController.all) //lISTAR
-router.get('/:id', TaskController.show); //Escolher pessoa uma a ser mostrada
+router.get('/:id', TaskController.show); //MOSTRAR //Escolher pessoa uma a ser mostrada
+router.delete('/:id', TaskController.delete); //DELETAR //Deletando a terefa que tem o id do parâmetro 
+
+router.put('/:id/:done', TaskController.done) //Atualizar status da tarefa
+router.get('/filter/all', MacaddressValidation, TaskController.all) //lISTAR Todas as tarefas
+
 module.exports = router; //exportando a rota de criação de tarefas

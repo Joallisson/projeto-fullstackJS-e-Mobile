@@ -35,7 +35,7 @@ class TaskController { //Criando classe TaskController
 
     }
 
-    async show(req, res){
+    async show(req, res){ //Mostrar uma única tarefa
         await TaskModel.findById(req.params.id)
         .then(response => {
             if (response) {
@@ -44,10 +44,34 @@ class TaskController { //Criando classe TaskController
                 return res.status(404).json({error: "Tarefa não encontrada"})
             }
 
-        }).catch(error => {
+        })
+        .catch(error => {
             return res.status(500).json(error);
         })
     }
+
+    async delete(req, res){ //Deletar uma tarefa
+        await TaskModel.deleteOne({'_id': req.params.id})
+        .then(response => {
+            return res.status(200).json(response)
+        })
+        .catch(error => {
+            return res.status(500).json(error)
+        })
+    }
+
+    async done(req, res){ //Atualizar o status da tarefa
+        await TaskModel.findByIdAndUpdate(
+            {'_id': req.params.id},
+            {'done': req.params.done}, 
+            {new: true})
+            .then(response => {
+                return res.status(200).json(response)
+            })
+            .catch(error => {
+                return res.status(500).json(error)
+            })
+    }
 }
 
-module.exports = new TaskController();
+module.exports = new TaskController(); //Exportando função que do CRUD da API
