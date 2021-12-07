@@ -1,6 +1,8 @@
 const { response } = require('express');
 const TaskModel = require('../model/TaskModel'); //Pegando o TaskModel
 
+const current = new Date(); //Pegando a data atual e aramazenado nessa constante
+
 class TaskController { //Criando classe TaskController
     async create(req, res){ //Função assícrona para criar uma nova tarefa
         const task = new TaskModel(req.body); //Criando objeto com o corpo da requisição para criar uma nova tarefa
@@ -71,6 +73,21 @@ class TaskController { //Criando classe TaskController
             .catch(error => {
                 return res.status(500).json(error)
             })
+    }
+
+    async late(req, res){
+        await TaskModel //acessando o DB
+        .find({ //Encontre
+            'when': {'$lt': current}, //Para saber se as tarefas estão atrasadas, encontra as datas ('$lt' => Less Then ou Menor Que) menores que o atual
+            'macaddress': {'$in': req.body.macaddress}
+        })
+        .sort('when') //Ordenando pela data
+        .then(response => {
+            return res.status(200).json(response)
+        })
+        .catch(error => {
+            return res.status(500).json(error)
+        })
     }
 }
 
