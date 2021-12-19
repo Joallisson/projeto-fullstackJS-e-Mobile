@@ -2,6 +2,7 @@ const { response } = require('express');
 const TaskModel = require('../model/TaskModel'); //Pegando o TaskModel
 
 const current = new Date(); //Pegando a data atual e aramazenado nessa constante
+const {startOfDay, endOfDay} = require('date-fns'); //Importando biblioteca com funções que sabem o começo e o fim do dia
 
 class TaskController { //Criando classe TaskController
     async create(req, res){ //Função assícrona para criar uma nova tarefa
@@ -33,8 +34,6 @@ class TaskController { //Criando classe TaskController
         .catch(error => {
             return res.status(500).json(error); //Se der tudo errado
         });
-    
-
     }
 
     async show(req, res){ //Mostrar uma única tarefa
@@ -45,7 +44,6 @@ class TaskController { //Criando classe TaskController
             } else {
                 return res.status(404).json({error: "Tarefa não encontrada"})
             }
-
         })
         .catch(error => {
             return res.status(500).json(error);
@@ -80,6 +78,20 @@ class TaskController { //Criando classe TaskController
         .find({ //Encontre
             'when': {'$lt': current}, //Para saber se as tarefas estão atrasadas, encontra as datas ('$lt' => Less Then ou Menor Que) menores que o atual
             'macaddress': {'$in': req.body.macaddress}
+        })
+        .sort('when') //Ordenando pela data
+        .then(response => {
+            return res.status(200).json(response)
+        })
+        .catch(error => {
+            return res.status(500).json(error)
+        })
+    }
+
+    async today(req, res){
+        await TaskModel.find({
+            'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
+            'when': {'$gte': startOfDay(current), '$lt': endOfDay(current)} //Verificando se a data atual está entre o começo e o fim do dia  //'$gte' = maior ou igual que //'$lt' = menor que
         })
         .sort('when') //Ordenando pela data
         .then(response => {
