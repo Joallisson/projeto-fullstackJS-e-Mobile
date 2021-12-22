@@ -15,5 +15,7 @@ router.put('/:id/:done', TaskController.done) //Atualizar status da tarefa
 router.get('/filter/all', MacaddressValidation, TaskController.all) //lISTAR Todas as tarefas
 router.get('/filter/late', MacaddressValidation, TaskController.late) //Listar todas as tarefas atrasadas
 router.get('/filter/today', MacaddressValidation, TaskController.today) //Listar todas as tarefas de hoje
+router.get('/filter/week', MacaddressValidation, TaskController.week) //Listar todas as tarefas da semana
+router.get('/filter/month', MacaddressValidation, TaskController.month) //Listar todas as tarefas do mês
 
 module.exports = router; //exportando a rota de criação de tarefas

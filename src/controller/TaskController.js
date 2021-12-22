@@ -2,7 +2,14 @@ const { response } = require('express');
 const TaskModel = require('../model/TaskModel'); //Pegando o TaskModel
 
 const current = new Date(); //Pegando a data atual e aramazenado nessa constante
-const {startOfDay, endOfDay} = require('date-fns'); //Importando biblioteca com funções que sabem o começo e o fim do dia
+const {
+    startOfDay, 
+    endOfDay, 
+    startOfWeek, 
+    endOfWeek,
+    startOfMonth,
+    endOfMonth
+} = require('date-fns'); //Importando biblioteca com funções que sabem o começo e o fim do dia
 
 class TaskController { //Criando classe TaskController
     async create(req, res){ //Função assícrona para criar uma nova tarefa
@@ -73,7 +80,7 @@ class TaskController { //Criando classe TaskController
             })
     }
 
-    async late(req, res){
+    async late(req, res){ //Mostrando as tarefas atrasadas
         await TaskModel //acessando o DB
         .find({ //Encontre
             'when': {'$lt': current}, //Para saber se as tarefas estão atrasadas, encontra as datas ('$lt' => Less Then ou Menor Que) menores que o atual
@@ -88,17 +95,45 @@ class TaskController { //Criando classe TaskController
         })
     }
 
-    async today(req, res){
+    async today(req, res){ //Mostrando as tarefas do dia
         await TaskModel.find({
             'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
             'when': {'$gte': startOfDay(current), '$lt': endOfDay(current)} //Verificando se a data atual está entre o começo e o fim do dia  //'$gte' = maior ou igual que //'$lt' = menor que
         })
         .sort('when') //Ordenando pela data
         .then(response => {
-            return res.status(200).json(response)
+            return res.status(200).json(response) //Deu tudo certo
         })
         .catch(error => {
-            return res.status(500).json(error)
+            return res.status(500).json(error) //Alguma coisa deu errada
+        })
+    }
+
+    async week(req, res){ //Mostrando as tarefas da semana
+        await TaskModel.find({
+            'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
+            'when': {'$gte': startOfWeek(current), '$lte': endOfWeek(current)} //Verificando se a data atual está entre o começo e o fim do dia  //'$gte' = maior ou igual que //'$lt' = menor ou igual que
+        })
+        .sort('when') //Ordenando pela data
+        .then(response => {
+            return res.status(200).json(response) //Deu tudo certo
+        })
+        .catch(error => {
+            return res.status(500).json(error) //Alguma coisa deu errada
+        })
+    }
+
+    async month(req, res){ //Mostrando as tarefas do mês
+        await TaskModel.find({
+            'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
+            'when': {'$gte': startOfMonth(current), '$lte': endOfMonth(current)} //Verificando se a data atual está entre o começo e o fim do dia  //'$gte' = maior ou igual que //'$lt' = menor ou igual que
+        })
+        .sort('when') //Ordenando pela data
+        .then(response => {
+            return res.status(200).json(response) //Deu tudo certo
+        })
+        .catch(error => {
+            return res.status(500).json(error) //Alguma coisa deu errada
         })
     }
 }
