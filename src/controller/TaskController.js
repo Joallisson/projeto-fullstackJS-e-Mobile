@@ -35,7 +35,7 @@ class TaskController { //Criando classe TaskController
     }
 
     async all(req, res){ //Listar todas as tarefas
-        await TaskModel.find({ macaddress: {'$in': req.body.macaddress}}) //Pegar o macaddress no banco de dados
+        await TaskModel.find({ macaddress: {'$in': req.params.macaddress}}) //Pegar o macaddress no banco de dados
         .sort('when') //ordenar por data e hora
         .then(response => {
             return res.status(200).json(response); //Se der tudo certo
@@ -86,7 +86,7 @@ class TaskController { //Criando classe TaskController
         await TaskModel //acessando o DB
         .find({ //Encontre
             'when': {'$lt': current}, //Para saber se as tarefas estão atrasadas, encontra as datas ('$lt' => Less Then ou Menor Que) menores que o atual
-            'macaddress': {'$in': req.body.macaddress}
+            'macaddress': {'$in': req.params.macaddress}
         })
         .sort('when') //Ordenando pela data
         .then(response => {
@@ -99,7 +99,7 @@ class TaskController { //Criando classe TaskController
 
     async today(req, res){ //Mostrando as tarefas do dia
         await TaskModel.find({
-            'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
+            'macaddress': {'$in': req.params.macaddress}, //Verificando o macaddress //'$in' = está contido
             'when': {'$gte': startOfDay(current), '$lte': endOfDay(current)} //Verificando se a data atual está entre o começo e o fim do dia  //'$gte' = maior ou igual que //'$lt' = menor que
         })
         .sort('when') //Ordenando pela data
@@ -113,7 +113,7 @@ class TaskController { //Criando classe TaskController
 
     async week(req, res){ //Mostrando as tarefas da semana
         await TaskModel.find({
-            'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
+            'macaddress': {'$in': req.params.macaddress}, //Verificando o macaddress //'$in' = está contido
             'when': {'$gte': startOfWeek(current), '$lte': endOfWeek(current)} //Verificando se a data atual está entre o começo e o fim da semana  //'$gte' = maior ou igual que //'$lt' = menor ou igual que
         })
         .sort('when') //Ordenando pela data
@@ -127,7 +127,7 @@ class TaskController { //Criando classe TaskController
 
     async month(req, res){ //Mostrando as tarefas do mês
         await TaskModel.find({
-            'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
+            'macaddress': {'$in': req.params.macaddress}, //Verificando o macaddress //'$in' = está contido
             'when': {'$gte': startOfMonth(current), '$lte': endOfMonth(current)} //Verificando se a data atual está entre o começo e o fim do mes  //'$gte' = maior ou igual que //'$lt' = menor ou igual que
         })
         .sort('when') //Ordenando pela data
@@ -141,7 +141,7 @@ class TaskController { //Criando classe TaskController
 
     async year(req, res){
         await TaskModel.find({
-            'macaddress': {'$in': req.body.macaddress}, //Verificando o macaddress //'$in' = está contido
+            'macaddress': {'$in': req.params.macaddress}, //Verificando o macaddress //'$in' = está contido
             'when': {'$gte': startOfYear(current), '$lte': endOfYear(current)} //Verificando se a data atual está entre o começo e o fim do ano  //'$gte' = maior ou igual que //'$lt' = menor ou igual que
         })
         .sort('when')
