@@ -5,6 +5,6 @@ server.use(express.json());
 const TaskRoutes = require('./routes/TaskRoutes');
 server.use('/task', TaskRoutes); //Rota Raiz
 
-server.listen(3000, () => {
+server.listen(3005, () => {
     console.log("API ONLINE");
 })
