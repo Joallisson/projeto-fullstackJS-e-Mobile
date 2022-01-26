@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Joallisson/projeto-fullstackJS-e-Mobile#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "date-fns": "^2.26.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.13"

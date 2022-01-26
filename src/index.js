@@ -1,5 +1,8 @@
 const express = require('express'); //O express é uma dependência que faz as requisições, processa e devolve ela
+const cors = require('cors')
+
 const server = express();
+server.use(cors());
 server.use(express.json());
 
 const TaskRoutes = require('./routes/TaskRoutes');
