@@ -12,23 +12,27 @@ const TaskValidation = async(req, res, next) => { //Criando uma constante para v
         return res.status(400).json({error: 'O título é obrigatório'})
     }else if(!description){
         return res.status(400).json({error: 'A descrição é obrigatória'});
-    }else if(!when){
+    }else if(!when){ //Senão tiver a data e hora
         return res.status(400).json({error: 'A data e a hora são obrigatórias'});
-    }else if(isPast(new Date(when))){ //Usando uma função para saber se usuário criou uma terefa no passado e convertendo o "when" de string para date
-        return res.status(400).json({error: 'Insira uma tarefa furura'});
     }else{ //Se tiver todos os dados obrigatórios na requisição
+
         let exists; //criando variável se existe uma tarefa
 
-        if(req.params.id){ //Se estiver passando o id pela requisição, então eu não posso verificar se a própria tarefa existe
+        if(req.params.id){ //Se tiver passando um ID na URL como parâmetro, então o usuário vai atualizar uma nova tarefa
             exists = await TaskModel.findOne({ 
                 '_id': {'$ne': req.params.id}, //'$ne' = Significa: Not Exists ou seja ele ignora o id
                 'when': {'$eq': new Date(when)}, //'$eq' = Significa: igual
                 'macaddress': {'$in': macaddress} //'$in' = Significa: está contido
             });
-        }else{ //Senão existir uma tarefa com o mesmo id do parâmetro atual no banco de dados
+        }else{ //Senão tiver passando um ID na URL como parâmetro, então o usuário vai cadastrar uma nova tarefa
+
+            if(isPast(new Date(when))){ //Usando uma função para saber se usuário criou uma terefa no passado e convertendo o "when" de string para date
+                return res.status(400).json({error: 'Insira uma tarefa furura'});
+            }
+
             exists = await TaskModel.findOne({ //Atribuindo à variável existis uma função assíncona (que para a execução das tarefas, no caso node aguarde o mongo retornar as informações) para saber se uma tarefa já foi criada na mesma data e no mesmo macaddress
-                'when': {'$eq': new Date(when)},
-                'macaddress': {'$in': macaddress}
+                'when': {'$eq': new Date(when)}, //'$eq' = Significa: igual
+                'macaddress': {'$in': macaddress} //'$in' = Significa: está contido
             });
         }
 
